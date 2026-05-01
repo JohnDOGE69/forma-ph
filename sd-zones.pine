@@ -1,0 +1,155 @@
+
+//@version=5
+indicator("Supply & Demand Zones", shorttitle="S&D", overlay=true, max_boxes_count=500, max_labels_count=500)
+
+// ─── INPUTS ─────────────────────────────────────────
+var string g1 = "Detection"
+int   i_lb   = input.int  (10,   "Base Lookback (bars)",          minval=3,    maxval=30,  group=g1)
+float i_dep  = input.float(1.5,  "Departure Candle (x ATR)",      minval=0.5,  maxval=8.0, step=0.1, group=g1)
+float i_wk   = input.float(0.35, "Max Wick / Body",               minval=0.05, maxval=0.9, step=0.05, group=g1)
+float i_mv   = input.float(0.5,  "Min Move from Base (x ATR)",    minval=0.1,  maxval=5.0, step=0.1, group=g1)
+
+var string g2 = "Zone Behaviour"
+int  i_tst  = input.int (3,     "Break After N Tests", minval=1, maxval=6,   group=g2)
+bool i_brks = input.bool(false, "Show Broken Zones",              group=g2)
+bool i_lbl  = input.bool(true,  "Show Labels",                    group=g2)
+int  i_ext  = input.int (300,   "Extend Right (bars)",minval=50, maxval=500, group=g2)
+
+var string g3 = "Colors"
+color i_df  = input.color(color.new(#00897b, 80), "Demand Fill",        group=g3)
+color i_db  = input.color(color.new(#00897b, 15), "Demand Border",      group=g3)
+color i_dt  = input.color(color.new(#00897b, 91), "Demand Tested Fill", group=g3)
+color i_sf  = input.color(color.new(#e53935, 80), "Supply Fill",        group=g3)
+color i_sb  = input.color(color.new(#e53935, 15), "Supply Border",      group=g3)
+color i_st  = input.color(color.new(#e53935, 91), "Supply Tested Fill", group=g3)
+color i_bf  = input.color(color.new(#607d8b, 90), "Broken Fill",        group=g3)
+color i_bb  = input.color(color.new(#607d8b, 50), "Broken Border",      group=g3)
+
+// ─── CANDLE METRICS ─────────────────────────────────
+atr   = ta.atr(14)
+body  = math.abs(close - open)
+uwick = high - math.max(close, open)
+lwick = math.min(close, open) - low
+
+bull_dep = close > open and body >= i_dep * atr and lwick <= i_wk * body
+bear_dep = close < open and body >= i_dep * atr and uwick <= i_wk * body
+
+// ─── ZONE ARRAYS ────────────────────────────────────
+var box[]  d_box  = array.new_box()
+var box[]  s_box  = array.new_box()
+var int[]  d_tst  = array.new_int()
+var int[]  s_tst  = array.new_int()
+var bool[] d_live = array.new_bool()
+var bool[] s_live = array.new_bool()
+var bool[] d_in   = array.new_bool()
+var bool[] s_in   = array.new_bool()
+var int[]  d_cb   = array.new_int()
+var int[]  s_cb   = array.new_int()
+
+// ─── MANAGE HELPERS ─────────────────────────────────
+manage_demand(int idx) =>
+    if array.get(d_live, idx) and bar_index > array.get(d_cb, idx)
+        b    = array.get(d_box, idx)
+        ztop = box.get_top(b)
+        zbot = box.get_bottom(b)
+        t    = array.get(d_tst, idx)
+        inz  = array.get(d_in, idx)
+        box.set_right(b, bar_index + i_ext)
+        inside = low <= ztop and high >= zbot
+        broke  = close < zbot
+        if broke
+            array.set(d_live, idx, false)
+            if i_brks
+                box.set_bgcolor(b, i_bf)
+                box.set_border_color(b, i_bb)
+            else
+                box.delete(b)
+        else if inside and not inz
+            nt = t + 1
+            array.set(d_tst, idx, nt)
+            array.set(d_in,  idx, true)
+            box.set_bgcolor(b, i_dt)
+            if nt >= i_tst
+                array.set(d_live, idx, false)
+        else if not inside and inz
+            array.set(d_in, idx, false)
+
+manage_supply(int idx) =>
+    if array.get(s_live, idx) and bar_index > array.get(s_cb, idx)
+        b    = array.get(s_box, idx)
+        ztop = box.get_top(b)
+        zbot = box.get_bottom(b)
+        t    = array.get(s_tst, idx)
+        inz  = array.get(s_in, idx)
+        box.set_right(b, bar_index + i_ext)
+        inside = high >= zbot and low <= ztop
+        broke  = close > ztop
+        if broke
+            array.set(s_live, idx, false)
+            if i_brks
+                box.set_bgcolor(b, i_bf)
+                box.set_border_color(b, i_bb)
+            else
+                box.delete(b)
+        else if inside and not inz
+            nt = t + 1
+            array.set(s_tst, idx, nt)
+            array.set(s_in,  idx, true)
+            box.set_bgcolor(b, i_st)
+            if nt >= i_tst
+                array.set(s_live, idx, false)
+        else if not inside and inz
+            array.set(s_in, idx, false)
+
+// ─── CREATE DEMAND ZONE ─────────────────────────────
+if bull_dep
+    dist = low
+    prox = open
+    ok   = false
+    for j = 1 to math.min(i_lb, bar_index - 1)
+        dist := math.min(dist, low[j])
+        if not ok and close[j] < open[j]
+            prox := math.min(open[j], close[j])
+            ok   := true
+    mv = close - dist
+    if ok and prox > dist and mv >= i_mv * atr
+        b = box.new(bar_index - i_lb, prox, bar_index + i_ext, dist, border_color=i_db, border_width=1, bgcolor=i_df)
+        if i_lbl
+            label.new(bar_index, prox, "D", yloc=yloc.price, color=color.new(#00897b, 5), textcolor=color.white, style=label.style_label_right, size=size.tiny)
+        array.push(d_box,  b)
+        array.push(d_tst,  0)
+        array.push(d_live, true)
+        array.push(d_in,   false)
+        array.push(d_cb,   bar_index)
+
+// ─── CREATE SUPPLY ZONE ─────────────────────────────
+if bear_dep
+    dist = high
+    prox = open
+    ok   = false
+    for j = 1 to math.min(i_lb, bar_index - 1)
+        dist := math.max(dist, high[j])
+        if not ok and close[j] > open[j]
+            prox := math.max(open[j], close[j])
+            ok   := true
+    mv = dist - close
+    if ok and dist > prox and mv >= i_mv * atr
+        b = box.new(bar_index - i_lb, dist, bar_index + i_ext, prox, border_color=i_sb, border_width=1, bgcolor=i_sf)
+        if i_lbl
+            label.new(bar_index, dist, "S", yloc=yloc.price, color=color.new(#e53935, 5), textcolor=color.white, style=label.style_label_right, size=size.tiny)
+        array.push(s_box,  b)
+        array.push(s_tst,  0)
+        array.push(s_live, true)
+        array.push(s_in,   false)
+        array.push(s_cb,   bar_index)
+
+// ─── MANAGE ALL ZONES ───────────────────────────────
+d_sz = array.size(d_box)
+if d_sz > 0
+    for i = 0 to d_sz - 1
+        manage_demand(i)
+
+s_sz = array.size(s_box)
+if s_sz > 0
+    for i = 0 to s_sz - 1
+        manage_supply(i)
