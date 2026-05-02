@@ -32,8 +32,8 @@ function toggleResearch(btn) {
 
 // ══ CART ══
 const FORMA_EMAIL      = 'jgabrielulat@gmail.com';
-const CALENDLY_BRIEF   = 'https://calendly.com/forma-ph/protocol';
-const CALENDLY_DISCOVER= 'https://calendly.com/forma-ph/protocol'; // update if you create a separate discovery event
+const CALENDLY_BRIEF   = 'https://calendly.com/gabrielsirachi/protocol';
+const CALENDLY_DISCOVER= 'https://calendly.com/gabrielsirachi/protocol'; // update if you create a separate discovery event
 
 let cartPaymentMethod = 'gcash'; // 'gcash' | 'card'
 
@@ -264,7 +264,7 @@ const _db = typeof supabase !== 'undefined'
   : null;
 
 // ══ CALENDLY ══
-const CALENDLY_URL = 'https://calendly.com/forma-ph/protocol';
+const CALENDLY_URL = 'https://calendly.com/gabrielsirachi/protocol';
 function openCalendly() {
   if (typeof fbq !== 'undefined') fbq('track', 'Lead');
   if (typeof ttq !== 'undefined') ttq.track('ClickButton');
