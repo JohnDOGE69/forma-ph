@@ -1241,3 +1241,155 @@ body.cart-open{overflow:hidden}
 
 /* Section tag uppercase tracking */
 .section-tag{letter-spacing:0.14em}
+
+/* ═══════════════════════════════════════════════════════════
+   DARK EMPEROR MARBLE — Surface texture system
+   Pure CSS gradient veining on all card/box elements.
+   Background-image layers over each card's existing bg-color.
+   Vein opacity kept 5–12 % so readability is never hurt.
+═══════════════════════════════════════════════════════════ */
+
+/* ── Variant A — Protocol cards, how-it-works steps ── */
+.protocol-card,
+.step {
+  background-image:
+    /* Wide primary vein — upper-left to lower-right */
+    linear-gradient(132deg,
+      transparent 18%,
+      rgba(235,226,211,0.04) 23%, rgba(244,238,226,0.11) 26%,
+      rgba(238,230,216,0.07) 29%, rgba(235,226,211,0.03) 33%,
+      transparent 39%),
+    /* Gold accent vein — crossing */
+    linear-gradient(108deg,
+      transparent 36%,
+      rgba(201,169,110,0.03) 40%, rgba(212,180,124,0.08) 43%,
+      rgba(201,169,110,0.03) 47%, transparent 52%),
+    /* Hairline — opposite angle */
+    linear-gradient(58deg,
+      transparent 14%,
+      rgba(235,226,211,0.025) 18%, rgba(244,240,230,0.065) 21%,
+      rgba(235,226,211,0.025) 24%, transparent 28%),
+    /* Deep sweep — lower quadrant */
+    linear-gradient(148deg,
+      transparent 52%,
+      rgba(222,214,200,0.03) 56%, rgba(240,230,215,0.09) 59.5%,
+      rgba(222,214,200,0.03) 63%, transparent 68%),
+    /* Atmospheric shimmer — top-left warmth */
+    radial-gradient(ellipse 80% 50% at 10% 15%,
+      rgba(235,226,211,0.035) 0%, transparent 52%),
+    /* Depth pool — bottom-right cool shadow */
+    radial-gradient(ellipse 60% 70% at 90% 90%,
+      rgba(4,3,2,0.09) 0%, transparent 55%);
+}
+
+/* ── Variant B — Offer card, waitlist form ── */
+.offer-card,
+.wf-inner {
+  background-image:
+    /* Broad diagonal — tall vein */
+    linear-gradient(118deg,
+      transparent 15%,
+      rgba(235,226,211,0.035) 20%, rgba(246,240,228,0.10) 23%,
+      rgba(238,230,218,0.065) 27%, rgba(235,226,211,0.03) 31%,
+      transparent 37%),
+    /* Gold vein — more prominent on the offer card */
+    linear-gradient(101deg,
+      transparent 30%,
+      rgba(201,169,110,0.04) 35%, rgba(218,186,134,0.09) 38.5%,
+      rgba(201,169,110,0.04) 42%, transparent 47%),
+    /* Secondary cream hairline */
+    linear-gradient(62deg,
+      transparent 42%,
+      rgba(235,226,211,0.025) 46%, rgba(244,240,230,0.07) 49%,
+      rgba(235,226,211,0.025) 52%, transparent 56%),
+    /* Lower crossing vein */
+    linear-gradient(139deg,
+      transparent 60%,
+      rgba(222,214,200,0.035) 63.5%, rgba(240,232,218,0.08) 66.5%,
+      rgba(222,214,200,0.03) 70%, transparent 74%),
+    /* Top-right warmth */
+    radial-gradient(ellipse 65% 45% at 85% 10%,
+      rgba(235,226,211,0.04) 0%, transparent 50%),
+    /* Center-bottom depth */
+    radial-gradient(ellipse 75% 60% at 20% 95%,
+      rgba(4,3,2,0.10) 0%, transparent 50%);
+}
+
+/* ── Variant C — Transform/testimonial cards, notsure card ── */
+.transform-card,
+.notsure-card {
+  background-image:
+    /* Long vein — sweeps full width */
+    linear-gradient(122deg,
+      transparent 10%,
+      rgba(235,226,211,0.03) 16%, rgba(244,238,226,0.09) 19.5%,
+      rgba(238,230,216,0.055) 23%, rgba(235,226,211,0.025) 27%,
+      transparent 33%),
+    /* Narrow gold thread */
+    linear-gradient(96deg,
+      transparent 43%,
+      rgba(201,169,110,0.025) 47%, rgba(210,178,122,0.065) 50%,
+      rgba(201,169,110,0.025) 53%, transparent 57%),
+    /* Short cross hairline */
+    linear-gradient(167deg,
+      transparent 28%,
+      rgba(235,226,211,0.02) 32%, rgba(244,240,230,0.055) 35%,
+      rgba(235,226,211,0.02) 38%, transparent 42%),
+    /* Broad atmospheric sweep — low opacity */
+    linear-gradient(141deg,
+      transparent 55%,
+      rgba(220,212,198,0.025) 59%, rgba(238,228,214,0.075) 62.5%,
+      rgba(220,212,198,0.025) 66%, transparent 71%),
+    /* Corner warmth — top-right */
+    radial-gradient(ellipse 55% 40% at 88% 8%,
+      rgba(235,226,211,0.04) 0%, transparent 48%),
+    /* Deep shadow — bottom-left */
+    radial-gradient(ellipse 70% 60% at 5% 92%,
+      rgba(4,3,2,0.08) 0%, transparent 52%);
+}
+
+/* ── Variant D — FAQ list, booking card ── */
+.faq-list,
+.booking-card {
+  background-image:
+    /* Diagonal — gentler angle for wide containers */
+    linear-gradient(136deg,
+      transparent 20%,
+      rgba(235,226,211,0.03) 25%, rgba(244,238,226,0.085) 28%,
+      rgba(238,230,218,0.05) 31%, rgba(235,226,211,0.025) 35%,
+      transparent 41%),
+    /* Gold thread — subtle on FAQ */
+    linear-gradient(105deg,
+      transparent 50%,
+      rgba(201,169,110,0.025) 54%, rgba(210,178,122,0.06) 57%,
+      rgba(201,169,110,0.025) 60%, transparent 64%),
+    /* Hairline cross */
+    linear-gradient(47deg,
+      transparent 30%,
+      rgba(235,226,211,0.02) 34%, rgba(244,240,230,0.055) 37%,
+      rgba(235,226,211,0.02) 40%, transparent 44%),
+    /* Right-side sweep */
+    linear-gradient(156deg,
+      transparent 44%,
+      rgba(218,210,196,0.03) 48%, rgba(238,228,214,0.07) 51.5%,
+      rgba(218,210,196,0.025) 55%, transparent 60%),
+    /* Top-left warmth */
+    radial-gradient(ellipse 72% 42% at 8% 12%,
+      rgba(235,226,211,0.03) 0%, transparent 48%),
+    /* Lower depth */
+    radial-gradient(ellipse 60% 55% at 92% 88%,
+      rgba(4,3,2,0.07) 0%, transparent 52%);
+}
+
+/* ── Shared: ensure overflow doesn't bleed past border-radius ── */
+.protocol-card,
+.offer-card,
+.transform-card,
+.notsure-card,
+.step,
+.wf-inner,
+.booking-card,
+.faq-list {
+  position: relative;
+  overflow: hidden;
+}
