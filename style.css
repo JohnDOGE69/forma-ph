@@ -239,30 +239,14 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 24px;position:relative;overflow:hidden}
 
 /* ══ STATUE ANIMATED BACKGROUND ══ */
-.statue-bg{position:absolute;inset:0;display:flex;pointer-events:none;z-index:0;overflow:hidden}
-
-/* Left panel — male statue, warm dark stone treatment */
-.statue-bg-left{
-  width:50%;
-  background:url('bg-statues.png') 20% center / auto 112% no-repeat fixed;
-  animation:driftLeft 32s ease-in-out infinite;
-  filter:brightness(1.00) saturate(1.10) sepia(0.10);
-}
-/* Right panel — female statue, lighter/warmer */
-.statue-bg-right{
-  width:50%;
-  background:url('bg-statues.png') 80% center / auto 112% no-repeat fixed;
-  animation:driftRight 32s ease-in-out infinite;
-  filter:brightness(1.10) saturate(1.08) sepia(0.06);
-}
-
-@keyframes driftLeft {
-  0%,100% { background-position:20% center; }
-  50%     { background-position:14% center; }
-}
-@keyframes driftRight {
-  0%,100% { background-position:80% center; }
-  50%     { background-position:86% center; }
+/* Single full-width statue background */
+.statue-bg-single{
+  position:absolute;inset:0;
+  background:url('bg-statues.png') center center / cover no-repeat;
+  filter:brightness(1.05) saturate(1.08) sepia(0.08);
+  pointer-events:none;
+  z-index:0;
+  will-change:transform;
 }
 
 /* Grain overlay */
@@ -713,7 +697,7 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:1024px){.hero-inner{grid-template-columns:1fr;gap:40px}.hero-visual{max-width:400px}.landing-inner{grid-template-columns:1fr;gap:40px}.auth-grid{grid-template-columns:1fr;gap:40px}.steps-grid{grid-template-columns:repeat(2,1fr)}.step:nth-child(2){border-right:none}.step:nth-child(3){border-top:1px solid var(--border);border-right:1px solid var(--border)}.step:nth-child(4){border-top:1px solid var(--border);border-right:none}.studies-grid{grid-template-columns:1fr}.compare-table{grid-template-columns:1fr}.compare-col--forma{border-left:1.5px solid var(--gold-border);border-right:1.5px solid var(--gold-border)}.ghkcu-inner{grid-template-columns:1fr}.offer-card{max-width:460px}}
-@media(max-width:768px){section{padding:68px 0}.nav-links,.nav-cta{display:none}.hamburger{display:flex}.protocols-grid,.transform-grid{grid-template-columns:1fr;max-width:460px}.steps-grid{grid-template-columns:1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}.landing-inner{text-align:center}.landing-bullets{align-items:flex-start;text-align:left}.hero-inner{text-align:center}.hero-cta-group{justify-content:center}.auth-cta-group{justify-content:center}.proof-bubble{left:auto;right:-8px;bottom:-14px}.footer-inner{flex-direction:column;gap:24px}.sticky-apply{display:none}.urgency-inner{flex-direction:column;gap:6px}body{cursor:auto}.cursor-dot,.cursor-ring{display:none}.statue-bg-left,.statue-bg-right{background-size:auto 100%;background-attachment:scroll}.hero-vignette{background:radial-gradient(ellipse 100% 100% at 50% 50%,rgba(16,11,6,0.70) 0%,rgba(120,100,72,0.30) 55%,transparent 100%)}.booking-card-inner{flex-direction:column;text-align:center}.ghkcu-inner{flex-direction:column}.offer-includes{grid-template-columns:1fr}.offer-card .btn-full{margin:14px 16px 0;width:calc(100% - 32px)}}
+@media(max-width:768px){section{padding:68px 0}.nav-links,.nav-cta{display:none}.hamburger{display:flex}.protocols-grid,.transform-grid{grid-template-columns:1fr;max-width:460px}.steps-grid{grid-template-columns:1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}.landing-inner{text-align:center}.landing-bullets{align-items:flex-start;text-align:left}.hero-inner{text-align:center}.hero-cta-group{justify-content:center}.auth-cta-group{justify-content:center}.proof-bubble{left:auto;right:-8px;bottom:-14px}.footer-inner{flex-direction:column;gap:24px}.sticky-apply{display:none}.urgency-inner{flex-direction:column;gap:6px}body{cursor:auto}.cursor-dot,.cursor-ring{display:none}.statue-bg-single{background-size:cover}.hero-vignette{background:radial-gradient(ellipse 100% 100% at 50% 50%,rgba(16,11,6,0.70) 0%,rgba(120,100,72,0.30) 55%,transparent 100%)}.booking-card-inner{flex-direction:column;text-align:center}.ghkcu-inner{flex-direction:column}.offer-includes{grid-template-columns:1fr}.offer-card .btn-full{margin:14px 16px 0;width:calc(100% - 32px)}}
 @media(max-width:768px){.stats-band-grid{grid-template-columns:1fr;gap:28px;max-width:380px}.stats-band-sep{display:none}.stats-band-item{padding:8px 16px}}
 @media(max-width:480px){h1{font-size:2.1rem}h2{font-size:1.75rem}.landing{padding:72px 20px 56px}.hero{padding:72px 20px 56px}.hero-card{padding:22px 18px}.hero-card-stat{font-size:3.8rem}.offer-price{font-size:1.8rem}.urgency-detail{display:none}}
 

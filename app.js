@@ -308,11 +308,9 @@ window.addEventListener('scroll', () => {
   if (progressBar) progressBar.style.transform = `scaleX(${window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)})`;
 }, { passive: true });
 
-// ══ ANIMATED STATUE BACKGROUND ══
-const statueBgLeft  = document.getElementById('statueBgLeft');
-const statueBgRight = document.getElementById('statueBgRight');
+// ══ SINGLE STATUE BACKGROUND — mouse parallax + scroll drift ══
+const statueBg = document.getElementById('statueBg');
 
-// Lerp targets — updated on mousemove, applied smoothly each frame
 let statTargDx = 0, statTargDy = 0;
 let statCurrDx = 0, statCurrDy = 0;
 let statMouseActive = false;
@@ -321,35 +319,27 @@ document.addEventListener('mousemove', (e) => {
   const hero = document.getElementById('home');
   if (!hero) return;
   const heroRect = hero.getBoundingClientRect();
-  if (e.clientY < heroRect.top || e.clientY > heroRect.bottom) {
-    statMouseActive = false;
-    return;
-  }
+  if (e.clientY < heroRect.top || e.clientY > heroRect.bottom) { statMouseActive = false; return; }
   statMouseActive = true;
   statTargDx = (e.clientX / window.innerWidth  - 0.5);
   statTargDy = (e.clientY / window.innerHeight - 0.5);
 });
 
-// Lerp animation loop — smooth 6% approach per frame (~0.8s settle)
 (function animateStatues() {
   statCurrDx += (statTargDx - statCurrDx) * 0.055;
   statCurrDy += (statTargDy - statCurrDy) * 0.055;
-  if (statMouseActive && statueBgLeft) {
-    statueBgLeft.style.transform  = `translateX(${-statCurrDx * 16}px) translateY(${statCurrDy * 7}px) scale(1.025)`;
-    if (statueBgRight) statueBgRight.style.transform = `translateX(${statCurrDx * 16}px) translateY(${statCurrDy * 7}px) scale(1.025)`;
+  if (statMouseActive && statueBg) {
+    statueBg.style.transform = `translateX(${statCurrDx * 14}px) translateY(${statCurrDy * 7}px) scale(1.04)`;
   }
   requestAnimationFrame(animateStatues);
 })();
 
-// Scroll parallax — statues drift upward as you scroll the hero
 window.addEventListener('scroll', () => {
-  if (statMouseActive) return;
+  if (statMouseActive || !statueBg) return;
   const hero = document.getElementById('home');
-  if (!hero || !statueBgLeft) return;
-  const progress = Math.min(window.scrollY / (hero.offsetHeight || 1), 1);
-  const moveY = progress * -50;
-  statueBgLeft.style.transform  = `translateY(${moveY}px)`;
-  if (statueBgRight) statueBgRight.style.transform = `translateY(${moveY}px)`;
+  if (!hero) return;
+  const moveY = Math.min(window.scrollY / (hero.offsetHeight || 1), 1) * -40;
+  statueBg.style.transform = `translateY(${moveY}px) scale(1.04)`;
 }, { passive: true });
 
 // ══ NAV + STICKY ══
