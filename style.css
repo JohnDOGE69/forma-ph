@@ -239,10 +239,10 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 24px;position:relative;overflow:hidden}
 
 /* ══ STATUE ANIMATED BACKGROUND ══ */
-/* Single full-width statue background */
+/* Single full-width statue background — shifted up to show heads */
 .statue-bg-single{
   position:absolute;inset:0;
-  background:url('bg-statues.png') center center / cover no-repeat;
+  background:url('bg-statues.png') center 8% / cover no-repeat;
   filter:brightness(1.05) saturate(1.08) sepia(0.08);
   pointer-events:none;
   z-index:0;
@@ -773,91 +773,32 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
   100%{filter:drop-shadow(0 0 var(--glow-px) rgba(201,169,110,var(--glow-op)))}
 }
 
-/* ── Column wrapper — capital top, shaft middle, base bottom ── */
+/* ── Pillar — real column image, animation layers on top ── */
 .pillar{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  height:100%;
-  gap:0;
-}
-
-/* ── Capital ── */
-.pillar-capital{
-  flex-shrink:0;
-  display:flex;flex-direction:column;align-items:center;
-  animation:capitalGlow 6s ease-in-out infinite;
-}
-@keyframes capitalGlow{
-  0%,100%{filter:drop-shadow(0 0 5px rgba(201,169,110,0.10))}
-  50%    {filter:drop-shadow(0 0 20px rgba(201,169,110,calc(var(--gold-bright) * 0.32))) drop-shadow(0 -6px 14px rgba(235,226,211,0.08))}
-}
-
-/* Abacus — flat crown plate with gold top border */
-.pillar-abacus{
-  width:92px;height:9px;
-  background:linear-gradient(to bottom,rgba(235,226,211,0.62),rgba(235,226,211,0.38));
-  border-top:1.5px solid rgba(201,169,110,0.85);
-  box-shadow:inset 0 1px 0 rgba(255,248,220,0.38),0 0 12px rgba(201,169,110,0.22);
-}
-
-/* Acanthus SVG capital */
-.pillar-acanthus{width:92px;height:64px;display:block;overflow:visible}
-
-/* Gold neck ring */
-.pillar-neck-ring{
-  width:62px;height:5px;
-  background:linear-gradient(to right,
-    transparent,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.75)) 20%,
-    rgba(220,185,130,calc(var(--gold-bright) * 0.90)) 50%,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.75)) 80%,
-    transparent
-  );
-  box-shadow:0 0 8px rgba(201,169,110,0.28),inset 0 1px 0 rgba(255,248,220,0.22);
-}
-
-/* ── Shaft — fills remaining space between capital and base ── */
-.pillar-shaft{
-  flex:1;
-  min-height:0;
-  width:58px;
   position:relative;
-  overflow:hidden;
-  /* Fluted surface — 9 channels */
-  background:
-    repeating-linear-gradient(90deg,
-      rgba(235,226,211,0.30) 0px,
-      rgba(235,226,211,0.07) 2.5px,
-      rgba(255,252,242,0.22) 5.5px,
-      rgba(235,226,211,0.05) 8.5px,
-      rgba(235,226,211,0.26) 11px,
-      rgba(235,226,211,0.05) 13px,
-      rgba(255,252,242,0.18) 16px,
-      rgba(235,226,211,0.05) 19px,
-      rgba(235,226,211,0.30) 22px
-    );
+  width:100%;
+  height:100%;
+  display:block;
 }
 
-/* Cylindrical depth shading */
-.pillar-shaft::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to right,
-    rgba(0,0,0,0.16) 0%,
-    rgba(255,255,255,0.04) 28%,
-    rgba(255,255,255,0.08) 50%,
-    rgba(255,255,255,0.04) 72%,
-    rgba(0,0,0,0.16) 100%
-  );
-  z-index:1;
+/* The actual Corinthian column photo */
+.pillar-img{
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  object-position:center;
+  display:block;
+  filter:sepia(0.12) brightness(0.84) saturate(1.15) contrast(0.94);
+  opacity:0.75;
+  mix-blend-mode:screen;
+  pointer-events:none;
+  user-select:none;
 }
 
-/* Section tint — changes hue zone as you scroll (set by JS via --shaft-tint) */
-.pillar-shaft::after{
-  content:'';position:absolute;inset:0;
-  background:var(--shaft-tint,rgba(235,226,211,0.03));
-  transition:background 1.8s ease;
-  z-index:2;
+/* All animation layers overlay the image */
+.pillar-shimmer,.pillar-shine,.pillar-shine--2,.pillar-glint{
+  position:absolute;
+  left:0;right:0;
 }
 
 /* Torch shimmer — slow warm amber travel */
@@ -957,46 +898,7 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
   94%{opacity:0;box-shadow:0 0 12px 8px rgba(255,248,200,0),0 -28px 2px 0 rgba(255,252,220,0),0 28px 2px 0 rgba(255,252,220,0),-28px 0 2px 0 rgba(255,252,220,0),28px 0 2px 0 rgba(255,252,220,0)}
 }
 
-/* Mid-shaft entasis gold ring */
-.pillar-midring{
-  position:absolute;left:0;right:0;top:38%;height:1px;
-  background:linear-gradient(to right,
-    transparent 0%,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.50)) 20%,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.70)) 50%,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.50)) 80%,
-    transparent 100%
-  );
-  z-index:4;
-}
-
-/* ── Base — Attic profile, anchored at bottom ── */
-.pillar-base{flex-shrink:0;display:flex;flex-direction:column;align-items:center}
-
-.pillar-base-1{
-  width:62px;height:9px;
-  background:linear-gradient(to bottom,rgba(235,226,211,0.44),rgba(235,226,211,0.28));
-  border-radius:50% 50% 0 0 / 60% 60% 0 0;
-}
-.pillar-base-ring{
-  width:70px;height:3px;
-  background:linear-gradient(to right,
-    transparent,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.55)) 25%,
-    rgba(201,169,110,calc(var(--gold-bright) * 0.55)) 75%,
-    transparent
-  );
-}
-.pillar-base-2{
-  width:70px;height:8px;
-  background:linear-gradient(to bottom,rgba(235,226,211,0.34),rgba(235,226,211,0.22));
-  border-radius:50% 50% 0 0 / 50% 50% 0 0;
-}
-.pillar-base-3{
-  width:82px;height:14px;
-  background:linear-gradient(to bottom,rgba(235,226,211,0.28),rgba(235,226,211,0.14));
-  box-shadow:0 5px 18px rgba(0,0,0,0.38),inset 0 1px 0 rgba(235,226,211,0.20);
-}
+/* (base/midring removed — real image handles capital+shaft+base) */
 
 @media(max-width:1100px){.pillar-fixture{display:none}}
 
