@@ -602,30 +602,83 @@ async function handleWaitlist() {
   bars.forEach(b => obs.observe(b));
 })();
 
-// ══ GREEK PILLAR PARALLAX ══
+// ══ CORINTHIAN PILLAR SCROLL EFFECTS ══
 (function initPillars() {
   const pL = document.getElementById('pillarL');
   const pR = document.getElementById('pillarR');
-  if (!pL && !pR) return;
-  const hero = document.getElementById('home');
+  if (!pL || !pR) return;
 
-  const tick = () => {
-    const sy    = window.scrollY;
-    const heroH = hero ? hero.offsetHeight : window.innerHeight;
-    const after = Math.max(0, sy - heroH + 280);
-    const fade  = Math.min(after / 320, 1);
-    const py    = -(after * 0.28);
-
-    if (pL) {
-      pL.style.opacity   = (fade * 0.55).toFixed(3);
-      pL.style.transform = `translateY(${py.toFixed(1)}px)`;
-    }
-    if (pR) {
-      pR.style.opacity   = (fade * 0.42).toFixed(3);
-      pR.style.transform = `translateY(${(py * 0.76).toFixed(1)}px)`;
-    }
+  // Milestone flash — brief golden blaze at key scroll depths
+  let lastMilestone = -1;
+  const flashPillar = (el, intensity) => {
+    el.classList.add('pillar-flash');
+    el.style.setProperty('--flash-scale', intensity);
+    setTimeout(() => el.classList.remove('pillar-flash'), 900);
   };
 
-  window.addEventListener('scroll', tick, { passive: true });
+  const tick = () => {
+    const sy       = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = maxScroll > 0 ? Math.min(sy / maxScroll, 1) : 0; // 0→1
+
+    // ── Base opacity & gentle sway ──────────────────────────
+    const baseOpL = 0.42 + progress * 0.20; // 0.42 → 0.62
+    const baseOpR = 0.32 + progress * 0.16; // 0.32 → 0.48
+    pL.style.opacity = baseOpL.toFixed(3);
+    pR.style.opacity = baseOpR.toFixed(3);
+
+    // ── Scroll-driven CSS custom properties ─────────────────
+    // Gold brightness: richer as you scroll deeper
+    const goldBright = 0.55 + progress * 0.70; // 0.55 → 1.25 (oversaturate at bottom)
+    // Glow spread: grows with depth
+    const glowPx  = 6 + progress * 28;         // 6px → 34px
+    const glowOp  = 0.06 + progress * 0.26;    // 0.06 → 0.32
+    // Shimmer speed: starts slow, quickens near bottom
+    const shimDur = Math.max(4.5, 10 - progress * 7); // 10s → 4.5s
+
+    [pL, pR].forEach(p => {
+      p.style.setProperty('--gold-bright',  goldBright.toFixed(3));
+      p.style.setProperty('--glow-px',      glowPx.toFixed(1) + 'px');
+      p.style.setProperty('--glow-op',      glowOp.toFixed(3));
+      p.style.setProperty('--shim-dur',     shimDur.toFixed(2) + 's');
+    });
+
+    // Drop-shadow grows with scroll depth
+    const dsColor = `rgba(201,169,110,${glowOp.toFixed(3)})`;
+    pL.style.filter = `drop-shadow(0 0 ${glowPx.toFixed(1)}px ${dsColor})`;
+    pR.style.filter = `drop-shadow(0 0 ${(glowPx * 0.8).toFixed(1)}px ${dsColor})`;
+
+    // ── Milestone flash pulses ───────────────────────────────
+    const milestone = Math.floor(progress / 0.25); // 0,1,2,3
+    if (milestone !== lastMilestone && milestone > 0) {
+      lastMilestone = milestone;
+      const intensity = 0.6 + milestone * 0.13; // 0.73 / 0.86 / 0.99
+      flashPillar(pL, intensity);
+      setTimeout(() => flashPillar(pR, intensity), 180); // slight stagger
+    }
+
+    // ── Section-based shaft tint ─────────────────────────────
+    // Map scroll zones to shaft hue shifts via CSS var
+    let tintR, tintG, tintB, tintA;
+    if (progress < 0.20) {
+      // Hero/stats — cool ivory
+      [tintR,tintG,tintB,tintA] = [235,226,211, 0.04];
+    } else if (progress < 0.45) {
+      // Results — warm amber
+      [tintR,tintG,tintB,tintA] = [201,169,110, 0.07];
+    } else if (progress < 0.70) {
+      // Science/research — slightly cooler gold
+      [tintR,tintG,tintB,tintA] = [210,185,140, 0.06];
+    } else {
+      // Apply/footer — deep warm gold blaze
+      [tintR,tintG,tintB,tintA] = [220,170,90, 0.10];
+    }
+    [pL, pR].forEach(p =>
+      p.style.setProperty('--shaft-tint', `rgba(${tintR},${tintG},${tintB},${(tintA * (0.6 + progress * 0.8)).toFixed(3)})`)
+    );
+  };
+
+  // Initialise immediately visible
   tick();
+  window.addEventListener('scroll', tick, { passive: true });
 })();
