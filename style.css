@@ -241,19 +241,19 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 /* ══ STATUE ANIMATED BACKGROUND ══ */
 .statue-bg{position:absolute;inset:0;display:flex;pointer-events:none;z-index:0;overflow:hidden}
 
-/* Left panel — shows MALE statue (left side of image) */
+/* Left panel — male statue, warm dark stone treatment */
 .statue-bg-left{
   width:50%;
   background:url('bg-statues.png') 20% center / auto 112% no-repeat fixed;
   animation:driftLeft 32s ease-in-out infinite;
-  filter:brightness(0.96) saturate(0.82);
+  filter:brightness(1.00) saturate(1.10) sepia(0.10);
 }
-/* Right panel — shows FEMALE statue (right side of image) */
+/* Right panel — female statue, lighter/warmer */
 .statue-bg-right{
   width:50%;
   background:url('bg-statues.png') 80% center / auto 112% no-repeat fixed;
   animation:driftRight 32s ease-in-out infinite;
-  filter:brightness(0.96) saturate(0.82);
+  filter:brightness(1.10) saturate(1.08) sepia(0.06);
 }
 
 @keyframes driftLeft {
@@ -268,7 +268,7 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 /* Grain overlay */
 .hero-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1}
 /* Vignette — editorial cinematic gradient */
-.hero-vignette{position:absolute;inset:0;background:linear-gradient(108deg,rgba(14,10,6,0.84) 0%,rgba(14,10,6,0.65) 24%,rgba(100,88,78,0.18) 50%,transparent 68%);pointer-events:none;z-index:1}
+.hero-vignette{position:absolute;inset:0;background:linear-gradient(108deg,rgba(16,11,6,0.66) 0%,rgba(16,11,6,0.40) 28%,rgba(55,40,22,0.10) 54%,transparent 70%);pointer-events:none;z-index:1}
 
 .hero-inner{max-width:1160px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 400px;gap:64px;align-items:center;position:relative;z-index:2}
 
@@ -525,7 +525,7 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 .footer-disclaimer p{font-size:0.7rem;color:var(--text-3);line-height:1.7}
 
 /* ══ LANDING (Section 1 — Product Intro + Offer) ══ */
-.landing{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 40px 60px;position:relative;overflow:hidden}
+.landing{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 40px 60px;position:relative;overflow:hidden;background:linear-gradient(to right,#1C1509 50%,#241C0E 50%)}
 .landing-inner{max-width:1160px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:center;position:relative;z-index:2}
 .landing-wordmark{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;letter-spacing:0.32em;color:var(--text);margin-bottom:8px;text-transform:uppercase}
 .landing-category{font-size:0.71rem;font-weight:500;letter-spacing:0.09em;color:var(--text-3);margin-bottom:18px;text-transform:uppercase}
@@ -713,7 +713,7 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:1024px){.hero-inner{grid-template-columns:1fr;gap:40px}.hero-visual{max-width:400px}.landing-inner{grid-template-columns:1fr;gap:40px}.auth-grid{grid-template-columns:1fr;gap:40px}.steps-grid{grid-template-columns:repeat(2,1fr)}.step:nth-child(2){border-right:none}.step:nth-child(3){border-top:1px solid var(--border);border-right:1px solid var(--border)}.step:nth-child(4){border-top:1px solid var(--border);border-right:none}.studies-grid{grid-template-columns:1fr}.compare-table{grid-template-columns:1fr}.compare-col--forma{border-left:1.5px solid var(--gold-border);border-right:1.5px solid var(--gold-border)}.ghkcu-inner{grid-template-columns:1fr}.offer-card{max-width:460px}}
-@media(max-width:768px){section{padding:68px 0}.nav-links,.nav-cta{display:none}.hamburger{display:flex}.protocols-grid,.transform-grid{grid-template-columns:1fr;max-width:460px}.steps-grid{grid-template-columns:1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}.landing-inner{text-align:center}.landing-bullets{align-items:flex-start;text-align:left}.hero-inner{text-align:center}.hero-cta-group{justify-content:center}.auth-cta-group{justify-content:center}.proof-bubble{left:auto;right:-8px;bottom:-14px}.footer-inner{flex-direction:column;gap:24px}.sticky-apply{display:none}.urgency-inner{flex-direction:column;gap:6px}body{cursor:auto}.cursor-dot,.cursor-ring{display:none}.statue-bg-left,.statue-bg-right{background-size:auto 100%;background-attachment:scroll}.hero-vignette{background:radial-gradient(ellipse 100% 100% at 50% 50%,rgba(10,9,8,0.85) 0%,rgba(158,144,128,0.5) 50%,transparent 100%)}.booking-card-inner{flex-direction:column;text-align:center}.ghkcu-inner{flex-direction:column}.offer-includes{grid-template-columns:1fr}.offer-card .btn-full{margin:14px 16px 0;width:calc(100% - 32px)}}
+@media(max-width:768px){section{padding:68px 0}.nav-links,.nav-cta{display:none}.hamburger{display:flex}.protocols-grid,.transform-grid{grid-template-columns:1fr;max-width:460px}.steps-grid{grid-template-columns:1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}.landing-inner{text-align:center}.landing-bullets{align-items:flex-start;text-align:left}.hero-inner{text-align:center}.hero-cta-group{justify-content:center}.auth-cta-group{justify-content:center}.proof-bubble{left:auto;right:-8px;bottom:-14px}.footer-inner{flex-direction:column;gap:24px}.sticky-apply{display:none}.urgency-inner{flex-direction:column;gap:6px}body{cursor:auto}.cursor-dot,.cursor-ring{display:none}.statue-bg-left,.statue-bg-right{background-size:auto 100%;background-attachment:scroll}.hero-vignette{background:radial-gradient(ellipse 100% 100% at 50% 50%,rgba(16,11,6,0.70) 0%,rgba(120,100,72,0.30) 55%,transparent 100%)}.booking-card-inner{flex-direction:column;text-align:center}.ghkcu-inner{flex-direction:column}.offer-includes{grid-template-columns:1fr}.offer-card .btn-full{margin:14px 16px 0;width:calc(100% - 32px)}}
 @media(max-width:768px){.stats-band-grid{grid-template-columns:1fr;gap:28px;max-width:380px}.stats-band-sep{display:none}.stats-band-item{padding:8px 16px}}
 @media(max-width:480px){h1{font-size:2.1rem}h2{font-size:1.75rem}.landing{padding:72px 20px 56px}.hero{padding:72px 20px 56px}.hero-card{padding:22px 18px}.hero-card-stat{font-size:3.8rem}.offer-price{font-size:1.8rem}.urgency-detail{display:none}}
 
