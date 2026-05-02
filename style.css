@@ -229,7 +229,7 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
 .mobile-menu.open{display:flex}
 
 /* ══ STICKY APPLY ══ */
-.sticky-apply{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(142,128,114,0.96);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:12px 24px;transform:translateY(100%);transition:transform 0.3s ease}
+.sticky-apply{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(10,9,8,0.96);backdrop-filter:blur(20px);border-top:1px solid rgba(201,169,110,0.18);padding:12px 24px;transform:translateY(100%);transition:transform 0.3s ease}
 .sticky-apply.visible{transform:translateY(0)}
 .sticky-apply-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .sticky-apply-inner span{font-size:0.85rem;color:var(--text-2)}
@@ -1091,3 +1091,153 @@ body.cart-open{overflow:hidden}
   .ret-stats{display:none}
   .ret-right{gap:8px}
 }
+
+/* ════════════════════════════════════════════════════════
+   MOBILE v2 — COMPREHENSIVE IMPROVEMENTS
+   ════════════════════════════════════════════════════════ */
+
+/* 1. Cursor fix — buttons must be tappable on mobile */
+@media(max-width:768px){
+  button,a,[onclick],label,select{cursor:pointer}
+  .study-toggle{cursor:pointer}
+  .research-expand-toggle{cursor:pointer}
+}
+
+/* 2. Mobile sticky CTA — bottom bar (override display:none) */
+@media(max-width:768px){
+  .sticky-apply{
+    display:flex !important;
+    padding:10px 16px;
+    padding-bottom:max(10px,env(safe-area-inset-bottom,10px));
+    background:rgba(10,9,8,0.97);
+    border-top:1px solid rgba(201,169,110,0.25);
+    backdrop-filter:blur(20px);
+  }
+  .sticky-apply-inner{
+    width:100%;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .sticky-apply-inner span{font-size:0.76rem;line-height:1.4}
+  .sticky-apply-inner .btn-gold{
+    padding:10px 18px;
+    font-size:0.76rem;
+    white-space:nowrap;
+    flex-shrink:0;
+    min-height:40px;
+  }
+}
+
+/* 3. Steps grid — compact on mobile */
+@media(max-width:768px){
+  .how-it-works{padding:52px 0 44px}
+  .step{padding:22px 18px}
+  .step-num{font-size:2.2rem !important;margin-bottom:6px}
+  .step-title{font-size:0.95rem}
+  .step-desc{font-size:0.82rem}
+}
+
+/* 4. Research expand — show 2 key stats on mobile */
+@media(max-width:768px){
+  .ret-inner{padding:18px 0;gap:12px}
+  .ret-stats{display:flex;gap:6px 8px}
+  .ret-stat:nth-child(n+4){display:none}
+  .ret-sep:nth-child(n+4){display:none}
+  .ret-cta{font-size:0.72rem}
+}
+
+/* 5. iOS input zoom prevention — keep font-size ≥ 16px */
+@media(max-width:768px){
+  input,textarea,select{font-size:16px !important}
+  .wf-input{font-size:16px !important}
+}
+
+/* 6. Touch targets — minimum 44px height */
+@media(max-width:768px){
+  .btn{min-height:44px}
+  .faq-q{min-height:52px;align-items:center}
+  .urgency-cta{min-height:36px}
+  .hamburger{min-width:44px;min-height:44px}
+}
+
+/* 7. Protocol card buttons — full width on mobile */
+@media(max-width:768px){
+  .protocol-card .btn{width:100%;justify-content:center}
+  .pcard-body{padding:18px 16px}
+}
+
+/* 8. Not sure card — tighter mobile padding */
+@media(max-width:768px){
+  .notsure-card{padding:0}
+  .notsure-card-head{padding:14px 16px;font-size:0.78rem}
+  .notsure-topics li{padding:9px 16px;font-size:0.82rem}
+  .notsure-card-footer{padding:11px 16px;font-size:0.78rem}
+  .notsure-btn{width:100%;justify-content:center}
+}
+
+/* 9. Statue: slightly smaller on very small phones */
+@media(max-width:390px){
+  .statue-bg-left,.statue-bg-right{background-size:auto 75% !important}
+}
+
+/* 10. Safe-area padding for hero + sections on notched phones */
+@media(max-width:768px){
+  .nav-inner{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+  .container{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+}
+
+/* 11. Transform cards — prevent overflow on narrow screens */
+@media(max-width:480px){
+  .transform-grid{grid-template-columns:1fr;max-width:340px;margin:0 auto 24px}
+  .transform-photos{aspect-ratio:unset}
+  .transform-photo{aspect-ratio:3/4}
+}
+
+/* 12. Stats band — ensure numbers don't clip */
+@media(max-width:480px){
+  .stats-band-num{font-size:2.4rem}
+  .stats-band-label{font-size:0.78rem}
+}
+
+/* 13. Booking card — full-width CTA */
+@media(max-width:768px){
+  .booking-card{margin:0 4px}
+  .booking-card-inner{padding:20px 18px;gap:14px}
+  .booking-btn{width:100%;justify-content:center}
+}
+
+/* 14. Footer padding — safe area on mobile */
+@media(max-width:768px){
+  footer{padding-bottom:max(40px,calc(40px + env(safe-area-inset-bottom)))}
+}
+
+/* 15. Urgency bar text — always show on mobile */
+@media(max-width:480px){
+  .urgency-detail{display:inline}
+  .urgency-inner{font-size:0.72rem;gap:4px 6px}
+}
+
+/* ════ GENERAL SITE IMPROVEMENTS (all screen sizes) ════ */
+
+/* Fix study toggle cursor globally */
+.study-toggle{cursor:pointer}
+
+/* Ensure all interactive buttons show pointer */
+.btn,.btn-dark,.btn-gold,.btn-outline-dark,.booking-btn,.notsure-btn{cursor:pointer}
+
+/* Research expand toggle — pointer everywhere */
+.research-expand-toggle{cursor:pointer}
+
+/* Protocol card CTA spacing */
+.protocol-card .btn{margin-top:4px}
+
+/* FAQ answer line-height */
+.faq-a p{line-height:1.72}
+
+/* Offer card trust strip — slightly larger text */
+.offer-trust-item{font-size:0.76rem}
+
+/* Section tag uppercase tracking */
+.section-tag{letter-spacing:0.14em}
