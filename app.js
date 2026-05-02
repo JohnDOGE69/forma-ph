@@ -608,7 +608,7 @@ async function handleWaitlist() {
   const pR   = document.getElementById('pillarR');
   if (!pL || !pR) return;
 
-  const sec02 = document.getElementById('protocols');          // section 02
+  const sec02 = document.getElementById('transformation');     // section 01
   const sec03 = document.querySelector('.how-it-works');       // section 03
   if (!sec02 || !sec03) return;
 

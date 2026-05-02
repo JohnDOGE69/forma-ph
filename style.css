@@ -876,26 +876,102 @@ sup.cite-sup{font-size:0.65em;color:var(--gold);vertical-align:super;line-height
   z-index:2;
 }
 
-/* Torch shimmer — travels bottom to top */
+/* Torch shimmer — slow warm amber travel */
 .pillar-shimmer{
   position:absolute;left:-15%;width:130%;height:36%;
   background:linear-gradient(to bottom,
     transparent 0%,
-    rgba(201,169,110,0.05) 20%,
-    rgba(235,226,211,0.12) 50%,
-    rgba(201,169,110,0.05) 80%,
+    rgba(201,169,110,0.06) 20%,
+    rgba(235,220,180,0.14) 50%,
+    rgba(201,169,110,0.06) 80%,
     transparent 100%
   );
-  animation:pillarShimmer var(--shim-dur,10s) ease-in-out infinite;
+  animation:pillarShimmer var(--shim-dur,9s) ease-in-out infinite;
   z-index:3;
 }
 @keyframes pillarShimmer{
   0%   {transform:translateY(200%);opacity:0}
   8%   {opacity:1}
-  92%  {opacity:0.85}
+  90%  {opacity:0.85}
   100% {transform:translateY(-140%);opacity:0}
 }
 .pillar-fixture--r .pillar-shimmer{animation-delay:4.5s}
+
+/* SHINE — bright white-gold streak, sunlight on marble */
+.pillar-shine{
+  position:absolute;
+  left:-40%;width:180%;height:22%;
+  background:linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,252,240,0.00) 35%,
+    rgba(255,250,232,0.28) 48%,
+    rgba(255,255,255,0.42) 50%,
+    rgba(255,250,232,0.28) 52%,
+    rgba(255,252,240,0.00) 65%,
+    transparent 100%
+  );
+  animation:pillarShine 6s cubic-bezier(0.4,0,0.6,1) infinite;
+  z-index:5;
+  pointer-events:none;
+}
+/* Second shine — offset timing, slightly narrower */
+.pillar-shine--2{
+  height:14%;
+  background:linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,252,240,0.00) 38%,
+    rgba(255,248,220,0.18) 49%,
+    rgba(255,255,255,0.32) 50%,
+    rgba(255,248,220,0.18) 51%,
+    rgba(255,252,240,0.00) 62%,
+    transparent 100%
+  );
+  animation:pillarShine 6s cubic-bezier(0.4,0,0.6,1) infinite;
+  animation-delay:3s;
+  z-index:5;
+}
+@keyframes pillarShine{
+  0%          {transform:translateY(115%) skewY(-2deg);opacity:0}
+  4%          {opacity:1}
+  /* pause at midpoint for a beat */
+  45%,55%     {opacity:0.0}
+  /* second flash on the way back — double gleam */
+  58%         {opacity:0.6}
+  62%         {opacity:0}
+  100%        {transform:translateY(-115%) skewY(-2deg);opacity:0}
+}
+/* Left pillar shine — slightly faster */
+.pillar-fixture--l .pillar-shine{animation-duration:5.4s}
+.pillar-fixture--l .pillar-shine--2{animation-duration:5.4s;animation-delay:2.7s}
+/* Right pillar shine — offset so they don't pulse simultaneously */
+.pillar-fixture--r .pillar-shine{animation-delay:2.2s}
+.pillar-fixture--r .pillar-shine--2{animation-delay:5.2s}
+
+/* GLINT — star-point flash on the shaft at a fixed spot */
+.pillar-glint{
+  position:absolute;
+  left:50%;top:28%;
+  transform:translate(-50%,-50%);
+  width:2px;height:2px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.95);
+  box-shadow:
+    0 0 0 0 rgba(255,255,255,0),
+    0 -14px 0 0 rgba(255,255,255,0),
+    0  14px 0 0 rgba(255,255,255,0),
+    -14px 0 0 0 rgba(255,255,255,0),
+     14px 0 0 0 rgba(255,255,255,0);
+  animation:pillarGlint 8s ease-in-out infinite;
+  z-index:6;
+}
+.pillar-fixture--r .pillar-glint{animation-delay:4s;top:55%}
+@keyframes pillarGlint{
+  0%,88%,100%{opacity:0;box-shadow:0 0 0 0 rgba(255,255,255,0),0 -14px 0 0 rgba(255,255,255,0),0 14px 0 0 rgba(255,255,255,0),-14px 0 0 0 rgba(255,255,255,0),14px 0 0 0 rgba(255,255,255,0)}
+  90%{opacity:1;box-shadow:0 0 6px 3px rgba(255,248,200,0.7),0 -18px 2px 0 rgba(255,252,220,0.55),0 18px 2px 0 rgba(255,252,220,0.55),-18px 0 2px 0 rgba(255,252,220,0.55),18px 0 2px 0 rgba(255,252,220,0.55)}
+  94%{opacity:0;box-shadow:0 0 12px 8px rgba(255,248,200,0),0 -28px 2px 0 rgba(255,252,220,0),0 28px 2px 0 rgba(255,252,220,0),-28px 0 2px 0 rgba(255,252,220,0),28px 0 2px 0 rgba(255,252,220,0)}
+}
 
 /* Mid-shaft entasis gold ring */
 .pillar-midring{
