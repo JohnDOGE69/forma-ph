@@ -602,83 +602,100 @@ async function handleWaitlist() {
   bars.forEach(b => obs.observe(b));
 })();
 
-// ══ CORINTHIAN PILLAR SCROLL EFFECTS ══
+// ══ CORINTHIAN PILLAR — Section 02→03 anchored, scroll effects ══
 (function initPillars() {
-  const pL = document.getElementById('pillarL');
-  const pR = document.getElementById('pillarR');
+  const pL   = document.getElementById('pillarL');
+  const pR   = document.getElementById('pillarR');
   if (!pL || !pR) return;
 
-  // Milestone flash — brief golden blaze at key scroll depths
+  const sec02 = document.getElementById('protocols');          // section 02
+  const sec03 = document.querySelector('.how-it-works');       // section 03
+  if (!sec02 || !sec03) return;
+
+  // ── Position pillars to span exactly section 02 top → section 03 bottom ──
+  const positionPillars = () => {
+    const top    = sec02.offsetTop;
+    const bottom = sec03.offsetTop + sec03.offsetHeight;
+    const height = bottom - top;
+    [pL, pR].forEach(p => {
+      p.style.top    = top + 'px';
+      p.style.height = height + 'px';
+      p.style.bottom = 'auto';
+    });
+  };
+
+  positionPillars();
+  window.addEventListener('resize', positionPillars, { passive: true });
+
+  // ── Milestone flash ──
   let lastMilestone = -1;
-  const flashPillar = (el, intensity) => {
+  const flashPillar = (el) => {
     el.classList.add('pillar-flash');
-    el.style.setProperty('--flash-scale', intensity);
     setTimeout(() => el.classList.remove('pillar-flash'), 900);
   };
 
+  // ── Scroll tick: effects driven by progress within section 02-03 zone ──
   const tick = () => {
-    const sy       = window.scrollY;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = maxScroll > 0 ? Math.min(sy / maxScroll, 1) : 0; // 0→1
+    const sy      = window.scrollY;
+    const vh      = window.innerHeight;
+    const zoneTop = sec02.offsetTop;
+    const zoneBot = sec03.offsetTop + sec03.offsetHeight;
+    const zoneH   = zoneBot - zoneTop;
 
-    // ── Base opacity & gentle sway ──────────────────────────
-    const baseOpL = 0.42 + progress * 0.20; // 0.42 → 0.62
-    const baseOpR = 0.32 + progress * 0.16; // 0.32 → 0.48
-    pL.style.opacity = baseOpL.toFixed(3);
-    pR.style.opacity = baseOpR.toFixed(3);
+    // How far through the zone we are (0 = just entering, 1 = just leaving)
+    const progress = Math.min(Math.max((sy + vh * 0.5 - zoneTop) / zoneH, 0), 1);
 
-    // ── Scroll-driven CSS custom properties ─────────────────
-    // Gold brightness: richer as you scroll deeper
-    const goldBright = 0.55 + progress * 0.70; // 0.55 → 1.25 (oversaturate at bottom)
-    // Glow spread: grows with depth
-    const glowPx  = 6 + progress * 28;         // 6px → 34px
-    const glowOp  = 0.06 + progress * 0.26;    // 0.06 → 0.32
-    // Shimmer speed: starts slow, quickens near bottom
-    const shimDur = Math.max(4.5, 10 - progress * 7); // 10s → 4.5s
+    // Visible only while the zone overlaps viewport
+    const inView = sy + vh > zoneTop + 60 && sy < zoneBot - 60;
+
+    // Fade in/out at zone boundaries
+    const edgeFade = Math.min(
+      Math.min((sy + vh - zoneTop) / 220, 1),   // entering — fade in
+      Math.min((zoneBot - sy) / 220, 1)           // leaving  — fade out
+    );
+
+    pL.style.opacity = inView ? (Math.min(edgeFade * 0.72, 0.72)).toFixed(3) : '0';
+    pR.style.opacity = inView ? (Math.min(edgeFade * 0.58, 0.58)).toFixed(3) : '0';
+
+    if (!inView) return;
+
+    // Gold brightness ramps 0.70 → 1.30 through the zone
+    const goldBright = 0.70 + progress * 0.60;
+    // Glow 10px → 38px
+    const glowPx  = 10  + progress * 28;
+    const glowOp  = 0.10 + progress * 0.28;
+    // Shimmer 9s → 4.5s
+    const shimDur = Math.max(4.5, 9 - progress * 4.5);
 
     [pL, pR].forEach(p => {
-      p.style.setProperty('--gold-bright',  goldBright.toFixed(3));
-      p.style.setProperty('--glow-px',      glowPx.toFixed(1) + 'px');
-      p.style.setProperty('--glow-op',      glowOp.toFixed(3));
-      p.style.setProperty('--shim-dur',     shimDur.toFixed(2) + 's');
+      p.style.setProperty('--gold-bright', goldBright.toFixed(3));
+      p.style.setProperty('--glow-px',     glowPx.toFixed(1) + 'px');
+      p.style.setProperty('--glow-op',     glowOp.toFixed(3));
+      p.style.setProperty('--shim-dur',    shimDur.toFixed(2) + 's');
     });
 
-    // Drop-shadow grows with scroll depth
     const dsColor = `rgba(201,169,110,${glowOp.toFixed(3)})`;
     pL.style.filter = `drop-shadow(0 0 ${glowPx.toFixed(1)}px ${dsColor})`;
-    pR.style.filter = `drop-shadow(0 0 ${(glowPx * 0.8).toFixed(1)}px ${dsColor})`;
+    pR.style.filter = `drop-shadow(0 0 ${(glowPx * 0.82).toFixed(1)}px ${dsColor})`;
 
-    // ── Milestone flash pulses ───────────────────────────────
-    const milestone = Math.floor(progress / 0.25); // 0,1,2,3
-    if (milestone !== lastMilestone && milestone > 0) {
-      lastMilestone = milestone;
-      const intensity = 0.6 + milestone * 0.13; // 0.73 / 0.86 / 0.99
-      flashPillar(pL, intensity);
-      setTimeout(() => flashPillar(pR, intensity), 180); // slight stagger
-    }
-
-    // ── Section-based shaft tint ─────────────────────────────
-    // Map scroll zones to shaft hue shifts via CSS var
-    let tintR, tintG, tintB, tintA;
-    if (progress < 0.20) {
-      // Hero/stats — cool ivory
-      [tintR,tintG,tintB,tintA] = [235,226,211, 0.04];
-    } else if (progress < 0.45) {
-      // Results — warm amber
-      [tintR,tintG,tintB,tintA] = [201,169,110, 0.07];
-    } else if (progress < 0.70) {
-      // Science/research — slightly cooler gold
-      [tintR,tintG,tintB,tintA] = [210,185,140, 0.06];
-    } else {
-      // Apply/footer — deep warm gold blaze
-      [tintR,tintG,tintB,tintA] = [220,170,90, 0.10];
-    }
+    // Shaft tint: ivory → amber gold as you move through the zone
+    const tintA = (0.04 + progress * 0.09).toFixed(3);
+    const tintR = Math.round(235 - progress * 34);
+    const tintG = Math.round(226 - progress * 57);
+    const tintB = Math.round(211 - progress * 101);
     [pL, pR].forEach(p =>
-      p.style.setProperty('--shaft-tint', `rgba(${tintR},${tintG},${tintB},${(tintA * (0.6 + progress * 0.8)).toFixed(3)})`)
+      p.style.setProperty('--shaft-tint', `rgba(${tintR},${tintG},${tintB},${tintA})`)
     );
+
+    // Flash at 33% and 66% through the zone
+    const milestone = Math.floor(progress / 0.33);
+    if (milestone !== lastMilestone && milestone > 0 && milestone < 3) {
+      lastMilestone = milestone;
+      flashPillar(pL);
+      setTimeout(() => flashPillar(pR), 200);
+    }
   };
 
-  // Initialise immediately visible
   tick();
   window.addEventListener('scroll', tick, { passive: true });
 })();
