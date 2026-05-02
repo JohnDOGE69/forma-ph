@@ -1,3 +1,228 @@
+// ══ RESEARCH COLLAPSIBLE ══
+function toggleResearch(btn) {
+  const body = document.getElementById('researchBody');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(!isOpen));
+  const cta = btn.querySelector('.ret-cta');
+  if (cta) cta.textContent = isOpen ? 'Read the research' : 'Collapse';
+}
+
+// Open collapsible if navigated to an anchor inside it
+(function() {
+  function openResearchIfNeeded() {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const target = document.querySelector(hash);
+    if (!target) return;
+    const body = document.getElementById('researchBody');
+    const btn  = document.querySelector('.research-expand-toggle');
+    if (!body || !btn) return;
+    const inside = body.contains(target) || body.querySelector(hash);
+    if (inside && !body.classList.contains('open')) {
+      body.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      const cta = btn.querySelector('.ret-cta');
+      if (cta) cta.textContent = 'Collapse';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', openResearchIfNeeded);
+  window.addEventListener('hashchange', openResearchIfNeeded);
+})();
+
+// ══ CART ══
+const FORMA_EMAIL      = 'jgabrielulat@gmail.com';
+const CALENDLY_BRIEF   = 'https://calendly.com/forma-ph/protocol';
+const CALENDLY_DISCOVER= 'https://calendly.com/forma-ph/protocol'; // update if you create a separate discovery event
+
+let cartPaymentMethod = 'gcash'; // 'gcash' | 'card'
+
+function selectPaymentMethod(method) {
+  cartPaymentMethod = method;
+  const gcashPanel = document.getElementById('cartGcashPanel');
+  const cardPanel  = document.getElementById('cartCardPanel');
+  const gcashBtn   = document.getElementById('cartGcashBtn');
+  const cardBtn    = document.getElementById('cartCheckoutBtn');
+  const secNote    = document.getElementById('cartSecurityNote');
+  const tabGcash   = document.getElementById('tabGcash');
+  const tabCard    = document.getElementById('tabCard');
+
+  if (method === 'gcash') {
+    gcashPanel.style.display = '';
+    cardPanel.style.display  = 'none';
+    gcashBtn.style.display   = '';
+    cardBtn.style.display    = 'none';
+    secNote.style.display    = '';
+    tabGcash.classList.add('active');
+    tabCard.classList.remove('active');
+  } else {
+    gcashPanel.style.display = 'none';
+    cardPanel.style.display  = '';
+    gcashBtn.style.display   = 'none';
+    cardBtn.style.display    = '';
+    secNote.style.display    = 'none';
+    tabCard.classList.add('active');
+    tabGcash.classList.remove('active');
+  }
+}
+
+function buildGcashEmailLink(protocol, price, name) {
+  const subject = encodeURIComponent(`FORMA Payment — ${protocol}`);
+  const body    = encodeURIComponent(
+    `Hi FORMA,\n\nI've sent payment for: ${protocol}\nAmount: ${price}\nName: ${name || '(your name)'}\n\nPlease find my GCash screenshot attached.\n\nThank you!`
+  );
+  return `mailto:${FORMA_EMAIL}?subject=${subject}&body=${body}`;
+}
+
+const PROTOCOLS = {
+  solo: {
+    name: 'Solo Reta',
+    price: '₱6,000',
+    amount: 600000,
+    includes: ['1 Retatrutide vial (research-grade)', 'Discreet shipping nationwide'],
+  },
+  reset: {
+    name: 'The Reset Protocol',
+    price: '₱8,000',
+    amount: 800000,
+    includes: ['1 Retatrutide vial (research-grade)', '30-Day meal plan (PDF, email)', 'Private consultation call', 'Discreet shipping nationwide'],
+  },
+  complete: {
+    name: 'The Complete Protocol',
+    price: '₱12,000',
+    amount: 1200000,
+    includes: ['1 Retatrutide vial (research-grade)', '1 GHK-Cu vial — collagen synthesis', '30-Day meal plan (PDF, email)', 'Private consultation call', 'Discreet shipping nationwide'],
+  },
+};
+
+let cartProtocol = null;
+
+function addToCart(key) {
+  cartProtocol = PROTOCOLS[key];
+  if (!cartProtocol) return;
+
+  document.getElementById('cartProtocolName').textContent  = cartProtocol.name;
+  document.getElementById('cartProtocolPrice').textContent = cartProtocol.price;
+  document.getElementById('cartTotalPrice').textContent    = cartProtocol.price;
+
+  const ul = document.getElementById('cartIncludes');
+  ul.innerHTML = cartProtocol.includes.map(i => `<li>${i}</li>`).join('');
+
+  // Set GCash amount display
+  const gcashAmountVal = document.getElementById('gcashAmountVal');
+  if (gcashAmountVal) gcashAmountVal.textContent = cartProtocol.price;
+
+  // Default to GCash tab
+  selectPaymentMethod('gcash');
+
+  // Build email link (name filled in later on submit)
+  const gcashBtn = document.getElementById('cartGcashBtn');
+  if (gcashBtn) {
+    gcashBtn.onclick = () => {
+      const name = document.getElementById('cartName')?.value.trim() || '';
+      const email= document.getElementById('cartEmail')?.value.trim() || '';
+      const phone= document.getElementById('cartPhone')?.value.trim() || '';
+      if (!name || !email) {
+        const errEl = document.getElementById('cartError');
+        if (errEl) { errEl.textContent = 'Please fill in your name and email first.'; errEl.style.display = 'block'; }
+        return false;
+      }
+      gcashBtn.href = buildGcashEmailLink(cartProtocol.name, cartProtocol.price, name);
+      return true;
+    };
+  }
+
+  document.getElementById('cartError').style.display = 'none';
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+  document.body.classList.add('cart-open');
+  updateCartBadge();
+}
+
+function openCartFromNav() {
+  // If something already in cart, just open the drawer
+  if (cartProtocol) {
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartDrawer').classList.add('open');
+    document.body.classList.add('cart-open');
+  } else {
+    // Nothing in cart — scroll to protocols section so they can pick one
+    const protocols = document.getElementById('protocols');
+    if (protocols) {
+      protocols.scrollIntoView({ behavior: 'smooth' });
+      // Flash the protocol cards to draw attention
+      setTimeout(() => {
+        document.querySelectorAll('.protocol-card').forEach(c => {
+          c.style.transition = 'box-shadow 0.3s';
+          c.style.boxShadow = '0 0 0 2px rgba(200,164,126,0.8)';
+          setTimeout(() => { c.style.boxShadow = ''; }, 800);
+        });
+      }, 600);
+    }
+  }
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('navCartBadge');
+  if (!badge) return;
+  if (cartProtocol) {
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.body.classList.remove('cart-open');
+}
+
+async function handleCheckoutSubmit() {
+  if (!cartProtocol) return;
+
+  const name  = document.getElementById('cartName').value.trim();
+  const email = document.getElementById('cartEmail').value.trim();
+  const phone = document.getElementById('cartPhone').value.trim();
+  const errEl = document.getElementById('cartError');
+  const btn   = document.getElementById('cartCheckoutBtn');
+
+  if (!name || !email || !phone) {
+    errEl.textContent = 'Please fill in all fields before continuing.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to payment…';
+
+  try {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        protocol: cartProtocol.name,
+        amount:   cartProtocol.amount,
+        name, email, phone,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Payment error');
+    window.location.href = data.url;
+  } catch (err) {
+    errEl.textContent = err.message || 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Pay Now — Secure Checkout →';
+  }
+}
+
 // ══ RESEARCH DISCLAIMER GATE ══
 (function() {
   const gate = document.getElementById('disclaimerGate');
@@ -360,6 +585,21 @@ async function handleWaitlist() {
     p.style.cssText = `left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;width:${size}px;height:${size}px;--op:${op};--tx:${tx}px;--ty:${ty}px;--ty2:${ty2}px;--dur:${dur}s;--del:${del}s`;
     cont.appendChild(p);
   }
+})();
+
+// ══ EFFICACY BAR CHART ANIMATION ══
+(function initBars() {
+  const bars = document.querySelectorAll('.chart-bar[data-w]');
+  if (!bars.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.width = e.target.dataset.w + '%';
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  bars.forEach(b => obs.observe(b));
 })();
 
 // ══ GREEK PILLAR PARALLAX ══
