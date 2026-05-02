@@ -617,11 +617,11 @@ async function handleWaitlist() {
     const py    = -(after * 0.28);
 
     if (pL) {
-      pL.style.opacity   = (fade * 0.22).toFixed(3);
+      pL.style.opacity   = (fade * 0.55).toFixed(3);
       pL.style.transform = `translateY(${py.toFixed(1)}px)`;
     }
     if (pR) {
-      pR.style.opacity   = (fade * 0.16).toFixed(3);
+      pR.style.opacity   = (fade * 0.42).toFixed(3);
       pR.style.transform = `translateY(${(py * 0.76).toFixed(1)}px)`;
     }
   };
